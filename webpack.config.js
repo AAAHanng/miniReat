@@ -2,13 +2,14 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
+  mode: 'development', // 强制开发模式，便于调试源码
   entry: './src/index.tsx',
 
-  output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
-    clean: true
-  },
+  // output: {
+  //   path: path.resolve(__dirname, 'dist'),
+  //   filename: 'bundle.js',
+  //   clean: true,
+  // },
 
   resolve: {
     extensions: ['.tsx', '.ts', '.js']
@@ -23,8 +24,10 @@ module.exports = {
           loader: 'babel-loader',
           options: {
             presets: [
-              ['@babel/preset-react', { runtime: 'classic' }]
-            ]
+              ['@babel/preset-react', { runtime: 'classic' }],
+              '@babel/preset-typescript',
+              '@babel/preset-env'
+            ],
           }
         }
       }
@@ -37,6 +40,8 @@ module.exports = {
       title: 'My React App'
     })
   ],
+
+  devtool: 'source-map',
 
   devServer: {
     static: './dist',

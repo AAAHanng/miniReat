@@ -8,6 +8,7 @@ import {
   appendAllChildren,
   insertOrAppendPlacementNode
 } from '../react-dom/index';
+import { markUpdateFromFiberToRoot, renderRoot } from '../react/workLoop';
 
 // 这里粘贴 root.ts 中 Fiber、调度、reconcile、commit、update 相关实现
 // ...（此处省略，实际迁移时会完整迁移所有相关实现）
@@ -30,22 +31,25 @@ export const enqueueUpdate = <State>(
   updateQueue: UpdateQueue<State>,
   update: Update<State>
 ): void => {
-  const pending = updateQueue.shared.pending;
-  if (pending === null) {
-    // 如果当前没有 pending 更新，自己成环
-    update.next = update;
-  } else {
-    // 加入已有 pending 更新的后面
-    update.next = pending.next;
-    pending.next = update;
-  }
-  // 更新队列的尾指针
+  // const pending = updateQueue.shared.pending;
+  // if (pending === null) {
+  //   // 如果当前没有 pending 更新，自己成环
+  //   update.next = update;
+  // } else {
+  //   // 加入已有 pending 更新的后面
+  //   update.next = pending.next;
+  //   pending.next = update;
+  // }
+  // // 更新队列的尾指针
   updateQueue.shared.pending = update;
 };
 
 export function scheduleUpdateOnFiber(fiber: FiberNode) {
-  // ...此处粘贴 scheduleUpdateOnFiber 的实现...
+  const root = markUpdateFromFiberToRoot(fiber);
+  if (root === null) return;
+  renderRoot(root);
 }
+
 
 export function createContainer(container: Container) {
   // 创建 HostRootFiber，type 为 HostRoot，代表 Fiber 树的起点
@@ -76,5 +80,3 @@ export function updateContainer(
   scheduleUpdateOnFiber(hostRootFiber);
   return element;
 }
-
-// 需要补充 createUpdateQueue、createUpdate、enqueueUpdate、scheduleUpdateOnFiber 的实现或导出

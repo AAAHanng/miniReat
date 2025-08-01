@@ -1,5 +1,6 @@
 import * as React from './react';
 import { ReactDOM } from './react-dom';
+import { Container } from './shared/types';
 
 const App = () => {
   return (
@@ -13,6 +14,5 @@ const App = () => {
 
 const root = document.querySelector('#root');
 
-if (root) {
-  ReactDOM.createRoot(root).render(<App />);
-}
+ReactDOM.createRoot(root as Container).render(<App />);
+

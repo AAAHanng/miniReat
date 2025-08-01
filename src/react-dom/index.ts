@@ -13,6 +13,7 @@ export function createInstance(type: string, props: any): Instance {
   const dom = document.createElement(type);
   for (const key in props) {
     if (key === 'children') continue;
+    // @ts-ignore
     dom[key] = props[key];
   }
   return dom;
