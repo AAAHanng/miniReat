@@ -53,6 +53,7 @@ export function ChildReconciler(shouldTrackEffects: boolean) {
 
         // 1. 判断 newChild 类型是否为合法对象
         if (typeof newChild === 'object' && newChild !== null) {
+            debugger;
             switch (newChild.$$typeof) {
                 case REACT_ELEMENT_TYPE:
                     // 如果是 React 元素类型（<div>、<Component> 等）

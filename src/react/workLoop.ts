@@ -78,7 +78,7 @@ function performUnitOfWork(workInProgress: FiberNode): void {
   // memoizedProps 是处理后
   // pendingProps 是处理前
   workInProgress.memoizedProps = workInProgress.pendingProps;
-  debugger
+
   if (next === null) {
     completeUnitOfWork(workInProgress);
   } else {
@@ -88,6 +88,7 @@ function performUnitOfWork(workInProgress: FiberNode): void {
 
 function completeUnitOfWork(fiber: FiberNode): void {
   let node: FiberNode | null = fiber;
+  debugger
   do {
     completeWork(node); // 对当前 fiber 执行 complete 阶段（生成 DOM 或收集副作用）
 
@@ -107,7 +108,7 @@ function completeUnitOfWork(fiber: FiberNode): void {
 export const completeWork = (wip: FiberNode): void => {
   const newProps = wip.pendingProps;
   const current = wip.alternate;
-
+  debugger
   switch (wip.tag) {
     case HostComponent:
       if (current !== null && wip.stateNode != null) {
@@ -136,6 +137,12 @@ export const completeWork = (wip: FiberNode): void => {
         const textInstance = createTextInstance(newProps.content);
         wip.stateNode = textInstance;
       }
+      break;
+
+    case HostRoot:
+      break;
+
+    case FunctionComponent:
       break;
 
     default:

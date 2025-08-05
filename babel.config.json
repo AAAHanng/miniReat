@@ -1,0 +1,10 @@
+{
+  "presets": [
+    ["@babel/preset-react", {
+      "pragma": "createElement",         // 替代 React.createElement
+      "pragmaFrag": "Fragment",          // 可选
+      "throwIfNamespace": false,
+      "runtime": "classic"               // 不能是 automatic
+    }]
+  ]
+}

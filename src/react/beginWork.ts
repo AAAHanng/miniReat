@@ -22,6 +22,7 @@ import {
 import {mountChildFibers, reconcileChildFibers} from "../react-reconciler/childFibers";
 
 export function beginWork(workInProgress: FiberNode) {
+    debugger
     switch (workInProgress.tag) {
         case FunctionComponent:
             return updateFunctionComponent(workInProgress);

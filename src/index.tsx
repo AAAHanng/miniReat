@@ -16,3 +16,14 @@ const root = document.querySelector('#root');
 
 ReactDOM.createRoot(root as Container).render(<App />);
 
+
+export function createElement(type: any, props: any, ...children: any[]) {
+    return {
+        $$typeof: Symbol('react.element'),
+        type,
+        props: {
+            ...props,
+            children
+        }
+    };
+}

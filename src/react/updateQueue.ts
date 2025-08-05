@@ -1,33 +1,29 @@
 import { Update, UpdateQueue } from "../react-reconciler/types";
 
-
-// 处理 update 队列，支持链式环形 update
-export const processUpdateQueue = <State>(
+export function processUpdateQueue<State>(
   baseState: State,
   pendingUpdate: Update<State> | null
-): { memoizedState: State } => {
-  const result: ReturnType<typeof processUpdateQueue<State>> = {
-    memoizedState: baseState,
-  };
+): { memoizedState: State } {
+  let resultState = baseState;
 
   if (pendingUpdate !== null) {
-    let first = pendingUpdate.next === undefined ? pendingUpdate : pendingUpdate.next;
-    let update = first;
-    let state = baseState;
-    do {
-      const action = update.action;
-      if (typeof action === 'function') {
-        state = (action as (prev: State) => State)(state);
-      } else {
-        state = action;
-      }
-      update = update.next!;
-    } while (update !== first && update != null);
-    result.memoizedState = state;
+    let update: Update<State> | null = pendingUpdate;
+
+    // 假设这里只有一个 update，不是链表结构
+    const action = update.action;
+
+    if (typeof action === 'function') {
+      // 如果是函数 action（类似 setState(prev => ...)）
+      resultState = (action as (prev: State) => State)(baseState);
+    } else {
+      // 如果是值 action（类似 setState(123)）
+      resultState = action;
+    }
   }
 
-  return result;
-};
+  return { memoizedState: resultState };
+}
+
 
 // 可选：补全 updateQueue 相关方法，便于后续维护
 export function createUpdateQueue<State>(): UpdateQueue<State> {
